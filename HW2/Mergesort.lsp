@@ -1,20 +1,34 @@
 (defun mergesort (numbers)
- (return-from mergesort numbers))
+	 numbers
+)
 
 
 
 
 ;main function
 (let
-	;part1:declare variable
+;--------part1:declare variable-----
 	 ((n (read))
-      (numbers))
-	;part2:expression
- (setf numbers
-  (do ( (i 0 (+ i 1)) (tmp nil))
-	((>= i n)	(reverse tmp))
-       (setf tmp (cons (read) tmp))
-  )
- )
+	(numbers))
+	
+;--------part2:expression-----------
+    ;set n element array
+	(setf numbers(make-array n))
 
-    (format t "~{~A ~}~%" (mergesort numbers)))
+	;store number in array
+	(do ((i 0 (+ i 1)))
+		((>= i n))                   
+		(setf (aref numbers i) (read)) 
+    )
+
+	;call merge sort
+	
+	;print sorted array
+	(do ((i 0 (+ i 1)))
+		((>= i n))
+ 		(format t "~A " (aref numbers i)) 
+	)
+	
+	(format t "~%")
+	
+)
