@@ -1,75 +1,70 @@
-;defun Mymerge (Myarray front mid end)
-
-(defun Mymerge (a low high)
+(defun Mymerge (Myarray front mid end)
 (let 
+
 	;defined variable
 	(	
-		(b (make-array (+ 1 (- high low))))
-		(k -1)
-		(mid (floor (+ low high) 2) )
-		(tmp)
+		(left (make-array (+ 2 (- mid front))));front~mid
+		(right (make-array(+ 1 (- end mid))));mid+1~end
+		(leftmax (+ 1 (- mid front)))
+		(rightmax (+ 1 (- end (+ 1 mid))))
+		(rightidx 0)
+		(leftidx 0)
+		(i 0)
+		(j 0)
 	)
+
 	;expression
-	(setf tmp (+ mid 1))
-
-	; Merging.
-	(do ((i low (+ i 0)) (j tmp (+ j 0)))
-		((and (> i mid) (> j high)))
-		(cond
-			((> i mid)
-				(progn
-					(setf k (+ k 1))
-					(setf (aref b k) (aref a j))
-					(setf j (+ j 1))
-				)
-			)
-			((> j high)
-				(progn
-					(setf k (+ k 1))
-					(setf (aref b k) (aref a i))
-					(setf i (+ i 1))
-				)
-			)
-			((>= (aref a i) (aref a j))
-				(progn
-					(setf k (+ k 1))
-					(setf (aref b k) (aref a j))
-					(setf j (+ j 1))
-				)
-			)
-			(t
-				(progn
-					(setf k (+ k 1))
-					(setf (aref b k) (aref a i))
-					(setf i (+ i 1))
-				)
-			)
-		)
+	
+	;把array[front]~array[mid]放進 LeftSub[]
+	(
+	do((i front (+ i 1)) (j 0 (+ 1 j)))
+	((> i mid))
+	 (setf (aref  left j) (aref Myarray i)) 
+;	(format t "~A " (aref left j)) 
 	)
+	(setf (aref  left leftmax) -1)	
 
-	(setf k 0)
-	(do ((i low (+ i 1))) 
-		((> i high))
-		(setf (aref a i) (aref b k))
-		(setf k (+ k 1))
+	;把array[mid+1]~array[end]放進 RightSub[]
+	(
+ 	do((i  (+ 1 mid) (+ i 1)) (j 0 (+ 1 j)))
+ 	((> i end))
+	(setf (aref  right j) (aref Myarray i))
+;	(format t "~A " (aref right j)) 
+	)
+	(setf (aref  right rightmax) -1)
+
+	(do ((i front (+ i 1)))
+	((> i end))
+		(cond
+		(
+	(and (not (= (aref left leftidx) -1)) (or (= (aref right rightidx) -1) (<= (aref left leftidx) (aref right rightidx))))
+			  	(progn
+				(setf (aref Myarray i) (aref left leftidx))
+				(setf leftidx (+ leftidx 1))	 
+				)	
+		)			
+			(t ;else
+				(setf (aref Myarray i) (aref right rightidx))
+				(setf rightidx (+ rightidx 1))
+			)
+		) 
 	)
 )
-
 )
 
 (defun mergesort (Myarray front end)
 (let	
-	(mid)
-	(setf mid (floor (+ front end) 2))
+	(
+		(mid (floor (+ front end) 2))
+	)
 	
 	(if(< front end)
 		(progn
 			(mergesort Myarray front mid)
 			(mergesort Myarray (+ mid 1) end)
-			(MyMerge Myarray front end)	
+			(MyMerge Myarray front mid end)	
 		)	
 	)
-
 )
 )
 
@@ -90,7 +85,7 @@
     )
 
 	;call merge sort
-	(mergesort numbers 0 (- n 1 ))	
+	(mergesort numbers 0 (- n 1 ))
 	;print sorted array
 	(do ((i 0 (+ i 1)))
 		((>= i n))
