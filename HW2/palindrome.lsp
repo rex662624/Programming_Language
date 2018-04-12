@@ -16,7 +16,7 @@
 
 ; MAIN FUNCTION
 (let
-	(list1)
-	(setq list1  '(cat dog bird bird dog cat));在這行宣告 
+	((list1(read)))
+	;(setq list1  '(cat dog bird bird dog cat));
 	(palindrome list1)
 )
