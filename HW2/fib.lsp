@@ -24,10 +24,11 @@
 	(trace fib1)
 	(trace fib2)
 	(fib1 n)	
-	(format t "orig: ~A ~%" (fib1 n))
+	(format t "Answer for orig: ~A ~%" (fib1 n))
+	;(fib1 n)
 	(format t "-------------------------~%" )
-	(fib2 n 0 1)
-	;(format t "tail: ~A ~%" (fib2 n 0 1))
+	;(fib2 n 0 1)
+	(format t "Answer for tail: ~A ~%" (fib2 n 0 1))
 	
 )
 
