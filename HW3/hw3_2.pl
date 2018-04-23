@@ -10,24 +10,32 @@ relationSet(N,Input):-%N是總數 input是每次讀進來的pair
 	relationSet(N1,_Input);N=0. %遇到N=0或是要繼續呼叫	
 
 %getrelation
-getRelation(T, P) :-
+getRelation(T, P,S1, S2) :-
 	T > 0,
 	readln(P),
 	nth0(0, P, A), nth0(1, P, B),
-	lca(A,B),
+	lca(A,B,S1,S2),
 	T0 is T - 1,
-	getRelation(T0, _P);
-	T = 0.
+	getRelation(T0, _P,S2,_S3);
+	T = 0,
+	printlist(S1).
 
 %ancestor
 
 ancestor(A,C):-is_Parent(A,C).
 ancestor(A,C):-is_Parent(P,C),ancestor(A,P).
 
-lca(A,B) :- 
-  A==B -> writeln(A);
-  ancestor(A,B) -> writeln(A);
-  is_Parent(X,A),lca(X,B).	
+lca(A,B,S1,S2) :- 
+  A==B -> append([A],S1,S2);
+  ancestor(A,B) -> append([A],S1,S2);
+  is_Parent(X,A),lca(X,B,S1,S2).	
+
+%將List print出來
+
+printlist([]).
+printlist([X|List]) :-
+    write(X), nl,
+    printlist(List).
 
 %mainfunction
 main :-
@@ -38,6 +46,7 @@ main :-
 	%開始讀要求
 	readln(T),
 	member(Z, T),
-	getRelation(Z, _A),
+	getRelation(Z, _A,_S1,_S2),
 	halt.
+
 :- initialization(main).
