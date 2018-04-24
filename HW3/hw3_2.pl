@@ -18,7 +18,13 @@ getRelation(T, P,S1, S2) :-
 	T0 is T - 1,
 	getRelation(T0, _P,S2,_S3);
 	T = 0,
-	printlist(S1).
+	reverse(S1,X,[]),%做reverse(因為最後輸入的會存在list的最前面)
+	printlist(X).
+
+%reverse 
+reverse([],Z,Z).
+reverse([H|T],Z,Acc):-reverse(T,Z,[H|Acc]).
+
 
 %ancestor
 
