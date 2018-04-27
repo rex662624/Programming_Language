@@ -1,7 +1,6 @@
 
-
-
 % 宣告事實（哪些node相連）
+%因為是雙向關係所以輸入一次要加入兩個fact ba 與ab
 relationSet(N, Edge) :-
 	N > 0,M is N-1,
 	readln(Edge),
@@ -10,15 +9,15 @@ relationSet(N, Edge) :-
 	assert(has(B, A)),
 	relationSet(M, _P);N = 0.
 
-% getRelation.
-getRelation(T, L, P,S1,S2) :-
+% getRelation. for迴圈輸入值,與作業3.2動作相同
+getRelation(T, L, P,I1,I2) :-
 	T > 0,T0 is T - 1,
 	readln(P),
 	nth0(0, P, A), nth0(1, P, B),
-	path(A,B,S1,S2),
-	getRelation(T0, L, _A,S2,_S3);
+	path(A,B,I1,I2),
+	getRelation(T0, L, _A,I2,_S3);
 	T = 0,
-	reverse(S1,X,[]),%做reverse(因為最後輸入的會存在list的最前面)
+	reverse(I1,X,[]),%做reverse(因為最後輸入的會存在list的最前面)
 	printlist(X).
 
 %reverse 
@@ -27,19 +26,19 @@ reverse([H|T],Z,Acc):-reverse(T,Z,[H|Acc]).
 
 %reachable
 %建立雙向關係
-bi-has(X,Y):-has(X,Y).
-bi-has(Y,X):-has(Y,X).
+%bi-has(X,Y):-has(X,Y).
+%bi-has(Y,X):-has(Y,X).
 
-path(A,B,S1,S2):-
+path(A,B,I1,I2):-
 	%要嘛走得到 要嘛走不到
-	walk(A,B,[],S1,S2);append(['No'],S1,S2).%writeln('NO').
+	walk(A,B,[],I1,I2);append(['No'],I1,I2).%writeln('NO').
 
-walk(A,B,V,S1,S2):-
+walk(A,B,V,I1,I2):-
 	has(A,X),
 	not(member(X,V)),
 	(
-	B=X -> append(['Yes'],S1,S2);%->writeln('Yes');
-	B=\=X ->walk(X,B,[A|V],S1,S2)
+	B=X -> append(['Yes'],I1,I2);%->writeln('Yes');
+	B=\=X ->walk(X,B,[A|V],I1,I2)
 	).
 	
 
@@ -60,7 +59,7 @@ main :-
 	%開始讀要求
 	readln(T),
 	member(Z, T),
-	getRelation(Z,N,_S1,_S2,_S3),
+	getRelation(Z,N,_I1,_I2,_S3),
 	halt.
 
 :- initialization(main).
