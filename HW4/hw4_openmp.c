@@ -1,49 +1,39 @@
 /*
 #row, #column: only deal with the two input matrices : ma na mb nb
-
 matrix variables in the following code:
 	input matrix : A, B
 	output matrix: C
 	sub-matrix of A: A11, A12, A21, A22
 	
 	Strassen algorithm:
-
 	P1 = A11 + A22
 	P2 = B11 + B22
 	P = P1 * P2
 	
 	Q1 = A21 + A22
 	Q = Q1 * B11
-
 	R1 = B12 - B22
 	R = A11 * R1
 	
 	S1 = B21 - B11
 	S = A22 * S1
-
 	T1 = A11 + A12
 	T = T1 * B22
 	
 	U1 = A21 - A11
 	U2 = B11 + B12
 	U = U1 * U2
-
 	V1 = A12 - A22
 	V2 = B21 + B22
 	V = V1 * V2
-
 	C111 = P + S
 	C112 = C111 - T
 	C11 = C112 + V
-
 	C12 = R + T
-
 	C21 = Q + S
-
 	C221 = P + R
 	C222 =  C221 - Q
 	C22 = C222 + U
-
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -66,8 +56,8 @@ void matrix_merge(int m, int n, double **mat,
 
 void multiply(int m1, int n1, double **mat1, int m2, int n2, double **mat2, double **mat3);
 
-
-int main() {
+int thread_count=1;
+int main(int argc,char*argv []) {
 	unsigned ma = 0;	
 	unsigned na = 0;
 	unsigned mb = 0;	
@@ -180,43 +170,58 @@ int main() {
 	
 	end = clock();
     cpu_time_used = ((double) (end - start));
-	fprintf(outfile, "spilt cost %f clicks \n", cpu_time_used);
+	printf("spilt cost %f clicks \n", cpu_time_used);
 
-	start = clock();
-	#pragma omp parallel sections	
+	thread_count = strtol(argv[1],NULL,10);
+	double totalstart;
+	totalstart = clock();
+
+	#pragma omp parallel sections num_threads(thread_count)	
 	{
 		#pragma omp section
 		{
+		printf("%d ",omp_get_thread_num());
 		add(ma/2, na/2, A11, A22, P1); // P
 		add(mb/2, nb/2, B11, B22, P2);
+		start=clock();
 		multiply(ma/2, na/2, P1, mb/2, nb/2, P2, P);
+		end = clock();
+		cpu_time_used = ((double) (end - start));
+		printf( "cost %f clicks \n", cpu_time_used);
+
 		}
+		
 		#pragma omp section
 		{
+		printf("%d ",omp_get_thread_num());
 		add(ma/2, na/2, A21, A22, Q1); // Q
 		multiply(ma/2, na/2, Q1, mb/2, nb/2, B11, Q);
 		}
 
 		#pragma omp section
 		{
+		printf("%d ",omp_get_thread_num());
 		sub(mb/2, nb/2, B12, B22, R1); // R
 		multiply(ma/2, na/2, A11, mb/2, nb/2, R1, R);
 		}
 
 		#pragma omp section
 		{
+		printf("%d ",omp_get_thread_num());
 		sub(mb/2, nb/2, B21, B11, S1); // S
 		multiply(ma/2, na/2, A22, mb/2, nb/2, S1, S);
 		}
 		
 		#pragma omp section
 		{
+		printf("%d ",omp_get_thread_num());
 		add(ma/2, na/2, A11, A12, T1); // T
 		multiply(ma/2, na/2, T1, mb/2, nb/2, B22, T);
 		}
 
 		#pragma omp section
-		{	
+		{
+		printf("%d ",omp_get_thread_num());
 		sub(ma/2, na/2, A21, A11, U1); // U
 		add(mb/2, nb/2, B11, B12, U2);
 		multiply(ma/2, na/2, U1, mb/2, nb/2, U2, U);
@@ -224,12 +229,15 @@ int main() {
 
 		#pragma omp section
 		{
+		printf("%d ",omp_get_thread_num());
 		sub(ma/2, na/2, A12, A22, V1); // V
 		add(mb/2, nb/2, B21, B22, V2);
-		multiply(ma/2, na/2, V1, mb/2, nb/2, V2, V);
+		
+		multiply(ma/2, na/2, V1, mb/2, nb/2,V2,V);
+		cpu_time_used = ((double) (end - start));
+
 		}
 	}
-	
 	#pragma omp parallel sections
 	{
 		
@@ -257,7 +265,7 @@ int main() {
 		}
 	}
 	end = clock();
-    cpu_time_used = ((double) (end - start));
+    cpu_time_used = ((double) (end - totalstart));
 	fprintf(outfile, "computation cost %f clicks \n", cpu_time_used);
 
 	// merge to C
@@ -317,13 +325,18 @@ void sub(int m, int n, double **mat1, double **mat2, double **mat3) {
 
 void multiply(int m1, int n1, double **mat1, int m2, int n2, double **mat2, double **mat3) {	
 	int i, j, k;
+
 	for(i = 0; i < m1; i++)
 		for(j = 0; j < n2; j++)
 			mat3[i][j] = 0;	
+
 	for(i = 0; i < m1; i++)
 		for(j = 0; j < n1; j++)
 			for(k = 0; k < n2; k++)
+				{
 				mat3[i][k] += mat1[i][j] * mat2[j][k];
+		//		printf("%d ",omp_get_thread_num());
+				}
 }
 
 void matrix_split(int m, int n, double **mat,

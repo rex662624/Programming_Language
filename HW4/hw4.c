@@ -126,9 +126,10 @@ int main() {
     cpu_time_used = ((double) (end - start));
 	fprintf(outfile, "tradition cost %f clicks \n", cpu_time_used);
 	// method 1 end
+	double totalstart;
 
 	// method 2 : Strassen algorithm
-	start = clock();
+	totalstart = clock();
 	// malloc
 	malloc_matrix(ma/2, na/2, &A11);
 	malloc_matrix(ma/2, na/2, &A12);
@@ -194,13 +195,22 @@ int main() {
 	
 	sub(ma/2, na/2, A21, A11, U1); // U
 	add(mb/2, nb/2, B11, B12, U2);
+
 	multiply(ma/2, na/2, U1, mb/2, nb/2, U2, U);
 
 	sub(ma/2, na/2, A12, A22, V1); // V
 	add(mb/2, nb/2, B21, B22, V2);
+	
+	start = clock();
 	multiply(ma/2, na/2, V1, mb/2, nb/2, V2, V);
-
+	end = clock();
+	cpu_time_used = ((double) (end - start));
+	printf("cost %lf clicks \n",cpu_time_used);
+	start = clock();
 	add(ma/2, nb/2, P, S, C111); // C11
+	end = clock();
+	cpu_time_used = ((double) (end - start));
+	printf("cost %lf clicks \n",cpu_time_used);
 	sub(ma/2, nb/2, C111, T, C112);
 	add(ma/2, nb/2, C112, V, C11);
 
@@ -216,7 +226,7 @@ int main() {
 	matrix_merge(ma, nb, C, C11, C12, C21, C22);
 	
 	end = clock();
-    cpu_time_used = ((double) (end - start));
+    cpu_time_used = ((double) (end - totalstart));
 	fprintf(outfile, "Strassen cost %f clicks \n", cpu_time_used);
 	// method 2 end
 	
