@@ -49,6 +49,8 @@ matrix variables in the following code:
 #include <stdlib.h>
 #include <time.h>
 
+
+
 void malloc_matrix(int m, int n, double ***matptr);
 void add(int m, int n, double **mat1, double **mat2, double **mat3);
 void sub(int m, int n, double **mat1, double **mat2, double **mat3);
@@ -83,7 +85,7 @@ int main() {
 	clock_t start, end;
     double cpu_time_used;
 	
-	infile = fopen("input.txt", "r");
+	infile = fopen("input1000.txt", "r");
 	if(infile == NULL) {
     	printf("Error in Opening infile");
     	return EXIT_FAILURE;
@@ -115,13 +117,11 @@ int main() {
 	malloc_matrix(ma, nb, &C);
 	
 	/*** do multiplication in different methods ***/
-	outfile = fopen("output.txt", "w+");
+	outfile = fopen("output_orig.txt", "w+");
 	
 	// method 1 : traditional
 	start = clock();
-
 	multiply(ma, na, A, mb, nb, B, C);
-	 
 	end = clock();
     cpu_time_used = ((double) (end - start));
 	fprintf(outfile, "tradition cost %f clicks \n", cpu_time_used);
