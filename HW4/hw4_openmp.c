@@ -3,7 +3,7 @@
 #include <time.h>
 #include <omp.h>
 
-#define INPUTFILE "input100.txt"
+#define INPUTFILE "input1000.txt"
 void malloc_matrix(int m, int n, double ***matptr);
 void add(int m, int n, double **mat1, double **mat2, double **mat3);
 void sub(int m, int n, double **mat1, double **mat2, double **mat3);
@@ -266,7 +266,6 @@ void multiply(int m1, int n1, double **mat1, int m2, int n2, double **mat2, doub
 	for(i = 0; i < m1; i++)
 		for(j = 0; j < n1; j++)
 			for(k = 0; k < n2; k++)
-				//mat3[1][1] += mat1[1][1] * mat2[1][1];
 				mat3[i][k] += mat1[i][j] * mat2[j][k];
 }
 void multiply_NotP(int m1, int n1, double **mat1, int m2, int n2, double **mat2, double **mat3) {	
