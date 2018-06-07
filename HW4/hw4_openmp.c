@@ -3,6 +3,7 @@
 #include <time.h>
 #include <omp.h>
 
+#define INPUTFILE "input100.txt"
 void malloc_matrix(int m, int n, double ***matptr);
 void add(int m, int n, double **mat1, double **mat2, double **mat3);
 void sub(int m, int n, double **mat1, double **mat2, double **mat3);
@@ -39,7 +40,7 @@ int main(int argc,char*argv []) {
 	clock_t start, end;
     double cpu_time_used;
 	
-	infile = fopen("input1000.txt", "r");
+	infile = fopen(INPUTFILE, "r");
 	if(infile == NULL) {
     	printf("Error in Opening infile");
     	return EXIT_FAILURE;
