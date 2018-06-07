@@ -41,7 +41,7 @@ void gemm_tlp_simd(float * restrict a, float * restrict b, float * restrict c, i
 }
 
 int main(void) {
-    int n = 1000;
+    int n = 1024;
     float *a = _mm_malloc(n*n * sizeof *a, 64);
     float *b = _mm_malloc(n*n * sizeof *b, 64);
     float *c1 = _mm_malloc(n*n * sizeof *c1, 64);
