@@ -10,7 +10,8 @@ void malloc_matrix(int m, int n, float ***matptr) {
 	// the memory of the 2d array is consecutive (each row)
 	int i;
 	float *tmp;	
-	tmp = _mm_malloc(m * n * sizeof(float), 16);
+//	tmp = _mm_malloc(m * n * sizeof(float), 16);
+	tmp = malloc(m * n * sizeof(float));
 	memset(tmp, 0, m*n * sizeof (float));
 	*matptr = malloc(m * sizeof(float *));
 	for(i = 0; i < m; i++)
@@ -143,20 +144,20 @@ int main(void) {
     dtime += omp_get_wtime();
      printf("time %f\n", dtime);
 //----------------------------------------------------------printf result
-/*
-	for(i = 0; i < ma; i++) {
-		for(j = 0; j < nb; j++) {
-			if(i < ma_in && j < nb_in)			
-				printf("%.2f  ", c1[i*nb + j]);
-		}		
-		printf("\n");	
-	}	
-	printf("\n");
 
 	for(i = 0; i < ma; i++) {
 		for(j = 0; j < nb; j++) {
 			if(i < ma_in && j < nb_in)			
-				printf("%.2f  ", c2[i*nb + j]);
+				if(c1[i][j]!=c2[i][j]||c3[i][j]!=c1[i][j])printf("error\n");//printf("%.2f  ", c1[i][j]);
+		}		
+
+	}	
+/*	printf("\n");
+
+	for(i = 0; i < ma; i++) {
+		for(j = 0; j < nb; j++) {
+			if(i < ma_in && j < nb_in)			
+				printf("%.2f  ", c2[i][ j]);
 		}		
 		printf("\n");	
 	}	
@@ -171,6 +172,7 @@ int main(void) {
 	}	
 	printf("\n");
 */
-//    printf("error %d\n", memcmp(c1,c2, ma*nb*sizeof *c1));
-//   printf("error %d\n", memcmp(c1,c3, ma*nb*sizeof *c1));
+	//printf("%.2f  ", **c1);printf("%.2f  ", c2);printf("%.2f  ", c3);printf("\n");	
+    //printf("error %d\n", memcmp(&c1[0][0],&c2[0][0], ma*nb*sizeof *c1));
+   //printf("error %d\n", memcmp(&c1[0][0],&c3[0][0], ma*nb*sizeof *c1));
 }
