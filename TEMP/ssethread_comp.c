@@ -172,7 +172,7 @@ int main(void) {
 	}	
 	printf("\n");
 */
-	//printf("%.2f  ", **c1);printf("%.2f  ", c2);printf("%.2f  ", c3);printf("\n");	
+	printf("%.2f  ", c1[0][6]);printf("%.2f  ", c2[1][5]);printf("%.2f  ", c3[1][8]);printf("\n");	
     //printf("error %d\n", memcmp(&c1[0][0],&c2[0][0], ma*nb*sizeof *c1));
    //printf("error %d\n", memcmp(&c1[0][0],&c3[0][0], ma*nb*sizeof *c1));
 }
