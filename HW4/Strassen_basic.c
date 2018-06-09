@@ -123,7 +123,7 @@ int main() {
 	multiply(ma, na, A, mb, nb, B, C);
 	double en=omp_get_wtime();
 	printf("Serial: %lf\n",en-st);	
-	fprintf(outfile, "tradition cost %lf s \n", en-st);
+	fprintf(outfile, "Basic%lf s \n", en-st);
 	// method 1 end
 	
 

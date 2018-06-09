@@ -3,7 +3,7 @@
 #include <time.h>
 #include <omp.h>
 
-#define INPUTFILE "input/input1024.txt"
+#define INPUTFILE "input/input1000.txt"
 void malloc_matrix(int m, int n, float ***matptr);
 void add(int m, int n, float **mat1, float **mat2, float **mat3);
 void sub(int m, int n, float **mat1, float **mat2, float **mat3);
@@ -71,7 +71,7 @@ int main(int argc,char*argv []) {
 	malloc_matrix(ma, nb, &C);
 	
 	/*** do multiplication in different methods ***/
-	outfile = fopen("output_ref.txt", "w+");
+	outfile = fopen("output_openmp.txt", "w+");
 	
 	// method 1 : traditional
 	thread_count = strtol(argv[1],NULL,10);
@@ -79,16 +79,15 @@ int main(int argc,char*argv []) {
 	double st=omp_get_wtime();
 	multiply_NotP(ma, na, A, mb, nb, B, C);
 	double en=omp_get_wtime();
-	printf("Serial: %lf\n",en-st);	
-	
+	printf("Basic: %lf\n",en-st);	
+	fprintf(outfile, "Basic: %lf s \n", en-st);
+
 	//parallel
 	st=omp_get_wtime();
 	multiply(ma, na, A, mb, nb, B, C);
 	en=omp_get_wtime();
-	printf("Parallel: %lf\n",en-st);
-
-
-	fprintf(outfile, "tradition cost + openmp %lf s \n", en-st);
+	printf("Basic + openmp: %lf\n",en-st);
+	fprintf(outfile, "Basic + openmp %lf s \n", en-st);
 	// method 1 end
 
 	// method 2 : Strassen algorithm
@@ -188,8 +187,8 @@ int main(int argc,char*argv []) {
 	
 
 	en=omp_get_wtime();
- 	printf("Parallel: %lf\n",en-st);
-	fprintf(outfile, "SSE+openpmp cost %lf s \n", en-st);
+ 	printf("Strassen+SSE+openpmp: %lf\n",en-st);
+	fprintf(outfile, "Strassen+SSE+openpmp: %lf s \n", en-st);
 	// method 2 end
 	
 
