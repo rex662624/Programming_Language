@@ -93,7 +93,6 @@ int main() {
 	double **B11, **B12, **B21, **B22;
 	double **C11, **C12, **C21, **C22;
 	double **C111, **C112, **C221, **C222;
-	double **P1, **P2, **Q1, **R1, **S1, **T1, **U1, **U2, **V1, **V2;
 	FILE *infile, *outfile;
 	struct arg *data;
 	int thread_count = 0;

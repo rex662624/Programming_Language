@@ -82,7 +82,7 @@ void multiply(int a[][realsize],int b[][realsize],int c[][realsize],int size){
 
 	int temp1[size/2][size/2],temp2[size/2][size/2];
 
-	int q1,q2,q3,q4,q5,q6,q7,i,j;
+	int  i,j;
 	
 	if(size==1) {
 		c[0][0]=a[0][0]*b[0][0];

@@ -10,8 +10,16 @@ void multiply(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float 
 
 void multiply2(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float **mat3);
 
-#define INPUTFILE "input/input1000.txt"
-int main() {
+#define INPUTFILE "input/input1024.txt"
+
+
+int main(int argc,char*argv []) {
+	int flag = 0;
+	if(argc>1){
+		if(atoi(argv[1])==1)flag = 1;
+		
+		else if(atoi(argv[1])==2)flag=2;
+	}
 	unsigned ma = 0;	
 	unsigned na = 0;
 	unsigned mb = 0;	
@@ -56,24 +64,29 @@ int main() {
 	/*** do multiplication in different methods ***/
 	outfile = fopen("output_orig.txt", "w+");
 	
-	double st=omp_get_wtime();
+	double st,en;
+	if(flag!=2){
+	st=omp_get_wtime();
 	multiply2(ma, na, A, mb, nb, B, C2);
-	double en=omp_get_wtime();
+	en=omp_get_wtime();
 	printf("Column major: %lf\n",en-st);	
 	fprintf(outfile, "Column major: %lf s \n", en-st);
+	}
 	
 	// method 2 : row major
+	if(flag!=1){
 	st=omp_get_wtime();
 	multiply(ma, na, A, mb, nb, B, C);
 	en=omp_get_wtime();
 	printf("Row major: %lf\n",en-st);	
 	fprintf(outfile, "Row major: %lf s \n", en-st);
+	}
 	// method 2 end
-
+/*	
 	for(i = 0; i < ma; i++) 
 		for(j = 0; j < nb; j++)
 			if(C2[i][j]!=C[i][j])printf("error\n");
-
+*/	
 	// output the result matrix C 
 	fprintf(outfile, "%d %d \n", ma, nb);
 	for(i = 0; i < ma; i++) {

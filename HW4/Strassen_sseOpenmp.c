@@ -4,7 +4,9 @@
 #include <omp.h>
 #include <string.h>
 #include <x86intrin.h>
-#define INPUTFILE "input/input1024"
+
+#define INPUTFILE "input/input1024.txt"
+
 void malloc_matrix(int m, int n, float ***matptr);
 void add(int m, int n, float **mat1, float **mat2, float **mat3);
 void sub(int m, int n, float **mat1, float **mat2, float **mat3);

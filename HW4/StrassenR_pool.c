@@ -353,7 +353,7 @@ init_memory_pool(1000000000);
 	fprintf(outfile, "%d %d \n", arow, bcol);
 	for(i=0;i<arow;i++) {
 		for(j=0;j<bcol;j++){
-				fprintf(outfile, "%8.0 ", c[i][j]);
+				fprintf(outfile, "%8.0d ", c[i][j]);
 		}
 		fprintf(outfile, "\n");		
 	}
