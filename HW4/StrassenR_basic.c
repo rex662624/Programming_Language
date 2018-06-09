@@ -19,7 +19,8 @@ c22=p1+p5-p3-p7
 #include<time.h>
 #include<omp.h>
 
-#define INPUTFILE "input/input256.txt"
+#define INPUTFILE "input/input512.txt"
+
 int squarematrix(int num){
 	int original_num = num, lower_power = 0, i, actual_num = 1;
 	if(num==1){ 
@@ -276,7 +277,9 @@ int main(){
 	time=((double)end-start);
 	
 	outfile = fopen("output_recursive.txt", "w+");
-	fprintf(outfile, "Time: %lf s\n", time);
+ 	printf("Strassen recursive: %lf\n",time);
+
+	fprintf(outfile, "Strassen recursive: %lf s\n", time);
 	fprintf(outfile, "%d %d \n", arow, bcol);
 	for(i=0;i<arow;i++) {
 		for(j=0;j<bcol;j++){

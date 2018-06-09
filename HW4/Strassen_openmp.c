@@ -73,6 +73,8 @@ int main(int argc,char*argv []) {
 	/*** do multiplication in different methods ***/
 	outfile = fopen("output_openmp.txt", "w+");
 	
+	if(argc>2&&atoi(argv[2])==2)goto method2;	
+
 	// method 1 : traditional
 	thread_count = strtol(argv[1],NULL,10);
 	//not parallel
@@ -90,6 +92,11 @@ int main(int argc,char*argv []) {
 	fprintf(outfile, "Basic + openmp %lf s \n", en-st);
 	// method 1 end
 
+	if(argc>2&&atoi(argv[2])==1){
+	return 0 ;
+	}
+
+method2:
 	// method 2 : Strassen algorithm
 	st=omp_get_wtime();
 	// malloc
@@ -187,8 +194,8 @@ int main(int argc,char*argv []) {
 	
 
 	en=omp_get_wtime();
- 	printf("Strassen+SSE+openpmp: %lf\n",en-st);
-	fprintf(outfile, "Strassen+SSE+openpmp: %lf s \n", en-st);
+ 	printf("Strassen 1 cut + openpmp: %lf\n",en-st);
+	fprintf(outfile, "Strassen 1 cut + openpmp: %lf s \n", en-st);
 	// method 2 end
 	
 

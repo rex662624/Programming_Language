@@ -49,7 +49,7 @@ matrix variables in the following code:
 #include <stdlib.h>
 #include <time.h>
 #include <omp.h>
-
+#define INPUTFILE "input/input512.txt"
 
 void malloc_matrix(int m, int n, float ***matptr);
 void add(int m, int n, float **mat1, float **mat2, float **mat3);
@@ -84,7 +84,7 @@ int main() {
 	FILE *infile, *outfile;
 
 	
-	infile = fopen("input1000.txt", "r");
+	infile = fopen( INPUTFILE , "r");
 	if(infile == NULL) {
     	printf("Error in Opening infile");
     	return EXIT_FAILURE;
@@ -117,7 +117,8 @@ int main() {
 	
 	/*** do multiplication in different methods ***/
 	outfile = fopen("output_orig.txt", "w+");
-	
+	double st,en;
+	/*
 	// method 1 : traditional
 	double st=omp_get_wtime();
 	multiply(ma, na, A, mb, nb, B, C);
@@ -125,7 +126,7 @@ int main() {
 	printf("Serial: %lf\n",en-st);	
 	fprintf(outfile, "Basic%lf s \n", en-st);
 	// method 1 end
-	
+	*/
 
 	// method 2 : Strassen algorithm
 	st=omp_get_wtime();
@@ -219,8 +220,8 @@ int main() {
 	matrix_merge(ma, nb, C, C11, C12, C21, C22);
 	
 	en=omp_get_wtime();
- 	printf("Parallel: %lf\n",en-st);
-	fprintf(outfile, "SSE+openpmp cost %lf s \n", en-st);
+ 	printf("Strassen only cut once: %lf\n",en-st);
+	fprintf(outfile, "Strassen only cut once:  %lf s \n", en-st);
 	// method 2 end
 	
 

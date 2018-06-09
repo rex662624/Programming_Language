@@ -10,7 +10,7 @@ void multiply(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float 
 
 void multiply2(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float **mat3);
 
-#define INPUTFILE "input/input1024.txt"
+#define INPUTFILE "input/input1000.txt"
 
 
 int main(int argc,char*argv []) {
@@ -91,8 +91,10 @@ int main(int argc,char*argv []) {
 	fprintf(outfile, "%d %d \n", ma, nb);
 	for(i = 0; i < ma; i++) {
 		for(j = 0; j < nb; j++)
-			fprintf(outfile, "%8.0lf ", C[i][j]);
-
+			if(flag!=1)
+				fprintf(outfile, "%8.0lf ", C[i][j]);
+			else if(flag!=2)
+				fprintf(outfile, "%8.0lf ", C2[i][j]);
 		fprintf(outfile, "\n");	
 	}
 	fclose(outfile);

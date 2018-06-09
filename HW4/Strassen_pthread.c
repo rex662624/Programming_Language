@@ -182,7 +182,7 @@ int main() {
 						.ma = ma, .na = na, .mb = mb, .nb = nb,
 						.A11 = A11, .A12 = A12, .A21 = A21, .A22 = A22,
 						.B11 = B11, .B12 = B12, .B21 = B21, .B22 = B22};
-		pthread_create(&pt[i], NULL, Strassen_partial_multiply,	(void *) data);
+		pthread_create(&pt[i], NULL, Strassen_partial_multiply,(void *) data);
 		
 	}
 	
@@ -206,9 +206,9 @@ int main() {
 	matrix_merge(ma, nb, C, C11, C12, C21, C22);
 	
 	end = omp_get_wtime();
-    cpu_time_used = ((double) (end - start));
-	printf("Strassen cost %f \n", cpu_time_used);
-	fprintf(outfile, "Strassen cost %f \n", cpu_time_used);
+    	cpu_time_used = ((double) (end - start));
+	printf("Strassen 1 cut + pthread %f \n", cpu_time_used);
+	fprintf(outfile, "Strassen 1 cut + pthread %f \n", cpu_time_used);
 	// method 2 end
 
 	// output the result matrix C 
@@ -235,12 +235,12 @@ void *Strassen_partial_multiply(void *data) {
 	taskLB = in->id*size;
 	taskUB = in->id*size + size;
 
-	printf("taskUB = %d, taskLB = %d \n", taskUB, taskLB);
+	//printf("taskUB = %d, taskLB = %d \n", taskUB, taskLB);
 	
-	printf("%d ready!! \n", in->id);
+	//printf("%d ready!! \n", in->id);
 
 	if(taskLB <= 0 && 0 < taskUB) {
-		printf("%d do task 0 \n", in->id);
+		//printf("%d do task 0 \n", in->id);
 		malloc_matrix(in->ma/2, in->na/2, &P1);
 		malloc_matrix(in->mb/2, in->nb/2, &P2);
 		malloc_matrix(in->ma/2, in->nb/2, &P);
@@ -249,35 +249,35 @@ void *Strassen_partial_multiply(void *data) {
 		multiply(in->ma/2, in->na/2, P1, in->mb/2, in->nb/2, P2, P);
 	} 
 	if(taskLB <= 1 && 1 < taskUB) {
-		printf("%d do task 1 \n", in->id);
+		//printf("%d do task 1 \n", in->id);
 		malloc_matrix(in->ma/2, in->na/2, &Q1);
 		malloc_matrix(in->ma/2, in->nb/2, &Q);
 		add(in->ma/2, in->na/2, in->A21, in->A22, Q1); // Q
 		multiply(in->ma/2, in->na/2, Q1, in->mb/2, in->nb/2, in->B11, Q);
 	}
 	if(taskLB <= 2 && 2 < taskUB) {
-		printf("%d do task 2 \n", in->id);
+		//printf("%d do task 2 \n", in->id);
 		malloc_matrix(in->mb/2, in->nb/2, &R1);
 		malloc_matrix(in->ma/2, in->nb/2, &R);
 		sub(in->mb/2, in->nb/2, in->B12, in->B22, R1); // R
 		multiply(in->ma/2, in->na/2, in->A11, in->mb/2, in->nb/2, R1, R);
 	}
 	if(taskLB <= 3 && 3 < taskUB) {
-		printf("%d do task 3 \n", in->id);
+		//printf("%d do task 3 \n", in->id);
 		malloc_matrix(in->mb/2, in->nb/2, &S1);
 		malloc_matrix(in->ma/2, in->nb/2, &S);
 		sub(in->mb/2, in->nb/2, in->B21, in->B11, S1); // S
 		multiply(in->ma/2, in->na/2, in->A22, in->mb/2, in->nb/2, S1, S);
 	}
 	if(taskLB <= 4 && 4 < taskUB) {
-		printf("%d do task 4 \n", in->id);
+		//printf("%d do task 4 \n", in->id);
 		malloc_matrix(in->ma/2, in->na/2, &T1);
 		malloc_matrix(in->ma/2, in->nb/2, &T);
 		add(in->ma/2, in->na/2, in->A11, in->A12, T1); // T
 		multiply(in->ma/2, in->na/2, T1, in->mb/2, in->nb/2, in->B22, T);
 	}
 	if(taskLB <= 5 && 5 < taskUB) {
-		printf("%d do task 5 \n", in->id);
+		//printf("%d do task 5 \n", in->id);
 		malloc_matrix(in->ma/2, in->na/2, &U1);
 		malloc_matrix(in->mb/2, in->nb/2, &U2);
 		malloc_matrix(in->ma/2, in->nb/2, &U);
@@ -286,7 +286,7 @@ void *Strassen_partial_multiply(void *data) {
 		multiply(in->ma/2, in->na/2, U1, in->mb/2, in->nb/2, U2, U);
 	}
 	if(taskLB <= 6 && 6 < taskUB) {
-		printf("%d do task 6 \n", in->id);
+		//printf("%d do task 6 \n", in->id);
 		malloc_matrix(in->ma/2, in->na/2, &V1);
 		malloc_matrix(in->mb/2, in->nb/2, &V2);
 		malloc_matrix(in->ma/2, in->nb/2, &V);

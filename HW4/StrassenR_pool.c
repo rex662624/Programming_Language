@@ -349,7 +349,10 @@ init_memory_pool(1000000000);
 	time=((double)end-start);
 	
 	outfile = fopen("output_pool.txt", "w+");
-	fprintf(outfile, "Time: %lf s\n", time);
+
+	printf("Strassen recursive + memory pool: %lf\n",time);
+	fprintf(outfile, "Strassen recursive + memory pool: %lf s\n", time);
+
 	fprintf(outfile, "%d %d \n", arow, bcol);
 	for(i=0;i<arow;i++) {
 		for(j=0;j<bcol;j++){

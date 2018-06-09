@@ -65,7 +65,7 @@ int main() {
 		}
 	}
 	
-	outfile = fopen("outputbasic_pthread.txt", "w+");
+	outfile = fopen("output_openmp.txt", "a+");
 	pthread_t pt[MAXTHREADS];
 	start = omp_get_wtime();
 	for(i=0;i<MAXTHREADS;i++){
@@ -77,7 +77,7 @@ int main() {
 	end = omp_get_wtime();
 	time = ((double) (end - start));
 	printf("Time:%lf ms\n", time);
-	fprintf(outfile, "Time:%lf s\n", time);
+	fprintf(outfile, "Basic + pthread: %lf s\n", time);
 	fprintf(outfile, "%d %d \n", arow, bcol);
 	for(i = 0; i < arow; i++) {
 		for(j = 0; j < bcol; j++)
