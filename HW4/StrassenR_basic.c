@@ -280,7 +280,7 @@ int main(){
 	fprintf(outfile, "%d %d \n", arow, bcol);
 	for(i=0;i<arow;i++) {
 		for(j=0;j<bcol;j++){
-				fprintf(outfile, "%d ", c[i][j]);
+				fprintf(outfile, "%8.0d ", c[i][j]);
 		}
 		fprintf(outfile, "\n");		
 	}

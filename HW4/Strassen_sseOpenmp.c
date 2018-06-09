@@ -223,7 +223,7 @@ int main(int argc,char*argv []) {
 	fprintf(outfile, "%d %d \n", ma, nb);
 	for(i = 0; i < ma; i++) {
 		for(j = 0; j < nb; j++)
-			fprintf(outfile, "%8.2lf ", C[i][j]);
+			fprintf(outfile, "%8.0lf ", C[i][j]);
 		fprintf(outfile, "\n");	
 	}
 	fclose(outfile);

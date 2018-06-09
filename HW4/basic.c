@@ -69,14 +69,17 @@ int main() {
 	printf("Row major: %lf\n",en-st);	
 	fprintf(outfile, "Row major: %lf s \n", en-st);
 	// method 2 end
+
 	for(i = 0; i < ma; i++) 
 		for(j = 0; j < nb; j++)
 			if(C2[i][j]!=C[i][j])printf("error\n");
+
 	// output the result matrix C 
 	fprintf(outfile, "%d %d \n", ma, nb);
 	for(i = 0; i < ma; i++) {
 		for(j = 0; j < nb; j++)
-			fprintf(outfile, "%8.2lf ", C[i][j]);
+			fprintf(outfile, "%8.0lf ", C[i][j]);
+
 		fprintf(outfile, "\n");	
 	}
 	fclose(outfile);

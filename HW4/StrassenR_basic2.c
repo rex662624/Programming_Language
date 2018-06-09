@@ -62,9 +62,9 @@ int main(){
 	for(i=0;i<temp;i++){
 		for(j=0;j<temp;j++){
 			if(j==0)
-			fprintf(outfile, "%d", c[i][j]);
+			fprintf(outfile, "%8.0d ", c[i][j]);
 			else
-			fprintf(outfile, " %d", c[i][j]);
+			fprintf(outfile, " %8.0d ", c[i][j]);
 		}
 		fprintf(outfile, "\n");	
 	}

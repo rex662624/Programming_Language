@@ -196,7 +196,7 @@ int main(int argc,char*argv []) {
 	fprintf(outfile, "%d %d \n", ma, nb);
 	for(i = 0; i < ma; i++) {
 		for(j = 0; j < nb; j++)
-			fprintf(outfile, "%8.2lf ", C[i][j]);
+			fprintf(outfile, "%8.0lf ", C[i][j]);
 		fprintf(outfile, "\n");	
 	}
 	fclose(outfile);
@@ -242,12 +242,12 @@ void sub(int m, int n, float **mat1, float **mat2, float **mat3) {
 void multiply(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float **mat3) {	
 	int i, j, k;
 
-#pragma omp parallel for num_threads(thread_count)private(i,j) shared(mat3)
+#pragma omp parallel for num_threads(thread_count) collapse(2)  private(i,j) shared(mat3)
 	for(i = 0; i < m1; i++)
 		for(j = 0; j < n2; j++)
 			mat3[i][j] = 0;	
 
-#pragma omp parallel for num_threads(thread_count) private(i,j,k) shared(mat3,mat1,mat2,m1,n1,n2)
+#pragma omp parallel for num_threads(thread_count)  collapse(3) private(i,j,k) shared(mat3,mat1,mat2,m1,n1,n2) 
 	for(i = 0; i < m1; i++)
 		for(j = 0; j < n1; j++)
 			for(k = 0; k < n2; k++)

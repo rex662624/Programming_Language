@@ -5,7 +5,7 @@
 #include <time.h>
 #include <omp.h>
 #define MAXTHREADS 4
-#define INPUTFILE "input/input4.txt"
+#define INPUTFILE "input/input1000.txt"
 int arow,acol,brow,bcol;
 float ** a;
 float ** b;
@@ -80,12 +80,9 @@ int main() {
 	fprintf(outfile, "Time:%lf s\n", time);
 	fprintf(outfile, "%d %d \n", arow, bcol);
 	for(i = 0; i < arow; i++) {
-		for(j = 0; j < bcol; j++){
-			if(j==0)
-				fprintf(outfile, "%lf", c[i][j]);
-			else
-				fprintf(outfile, " %lf", c[i][j]);
-		}
+		for(j = 0; j < bcol; j++)
+				fprintf(outfile, "%8.0lf ", c[i][j]);
+		
 		fprintf(outfile, "\n");		
 	}
 	fclose(outfile);
