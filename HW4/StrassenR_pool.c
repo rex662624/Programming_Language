@@ -301,7 +301,6 @@ int ** multiply(int ** a, int ** b, int size){
 int main(){
 //---------------------------memorypool--------------------------
 
-//pmpa_init_thread(POOLSIZE*sizeof(int));
 init_memory_pool(1000000000);
 
 //-----------------------------------------

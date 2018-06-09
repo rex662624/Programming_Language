@@ -4,7 +4,7 @@
 #include <omp.h>
 #include <string.h>
 #include <x86intrin.h>
-#define INPUTFILE "input/input1000.txt"
+#define INPUTFILE "input/input1024"
 void malloc_matrix(int m, int n, float ***matptr);
 void add(int m, int n, float **mat1, float **mat2, float **mat3);
 void sub(int m, int n, float **mat1, float **mat2, float **mat3);
@@ -96,13 +96,13 @@ int main(int argc,char*argv []) {
 
 	//not parallel
 	double st=omp_get_wtime();
-	multiply_NotP(ma, na, A, mb, nb, B, C);
+	//multiply_NotP(ma, na, A, mb, nb, B, C);
 	double en=omp_get_wtime();
 	printf("Basic: %lf\n",en-st);	
 	fprintf(outfile, "Basic: %lf s \n", en-st);
 	//parallel
 	st=omp_get_wtime();
-	multiply(ma, na, A, mb, nb, B, C);
+	//multiply(ma, na, A, mb, nb, B, C);
 	en=omp_get_wtime();
 	printf("Basic+SSE +openmp: %lf\n",en-st);
 
