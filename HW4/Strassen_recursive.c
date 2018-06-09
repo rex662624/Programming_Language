@@ -19,7 +19,7 @@ c22=p1+p5-p3-p7
 #include<time.h>
 #include<omp.h>
 
-#define INPUTFILE "input/input100.txt"
+#define INPUTFILE "input/input256.txt"
 int squarematrix(int num){
 	int original_num = num, lower_power = 0, i, actual_num = 1;
 	if(num==1){ 
@@ -41,7 +41,7 @@ int squarematrix(int num){
 	} 
 }
 
-void freethat(float ** a, float ** b, float ** c, int n){
+void freethat(int ** a, int ** b, int ** c, int n){
 	int i;
 	for(i=0;i<n;i++){
 		free(a[i]);
@@ -53,19 +53,19 @@ void freethat(float ** a, float ** b, float ** c, int n){
 	free(c);
 }
 
-float ** creatematrix(int row,int col){
+int ** creatematrix(int row,int col){
 	int i;
-	float ** m = (float **) calloc(row, sizeof(float *));
+	int ** m = (int **) calloc(row, sizeof(int *));
 	for(i=0; i<row; i++)
 	{
-		m[i] = (float *) calloc(col, sizeof(float));
+		m[i] = (int *) calloc(col, sizeof(int));
 	}
 	return m;
 }
 
-float ** addmatrix(float ** a, float ** b, int size){
+int ** addmatrix(int ** a, int ** b, int size){
 	int i,j;
-	float ** c = creatematrix(size,size);
+	int ** c = creatematrix(size,size);
 	for(i=0;i<size;i++){
 		for(j=0;j<size;j++){
 			c[i][j]=a[i][j]+b[i][j];
@@ -74,9 +74,9 @@ float ** addmatrix(float ** a, float ** b, int size){
 	return c;
 }
 
-float ** submatrix(float ** a, float ** b, int size){
+int ** submatrix(int ** a, int ** b, int size){
 	int i,j;
-	float ** c = creatematrix(size,size);
+	int ** c = creatematrix(size,size);
 	for(i=0;i<size;i++){
 		for(j=0;j<size;j++){
 			c[i][j]=a[i][j]-b[i][j];
@@ -85,23 +85,23 @@ float ** submatrix(float ** a, float ** b, int size){
 	return c;
 }	
 
-float ** multiply(float ** a, float ** b, int size){
+int ** multiply(int ** a, int ** b, int size){
 	int i,j;
 	int resize = size/2;
-	float ** c = creatematrix(size,size);
+	int ** c = creatematrix(size,size);
 	if(size==1){
 		c[0][0] = a[0][0] * b[0][0];
 	}
 	else{
-		float ** a11 = creatematrix(resize,resize);
-		float ** a12 = creatematrix(resize,resize);
-		float ** a21 = creatematrix(resize,resize);
-		float ** a22 = creatematrix(resize,resize);
-		float ** b11 = creatematrix(resize,resize);
-		float ** b12 = creatematrix(resize,resize);
-		float ** b21 = creatematrix(resize,resize);
-		float ** b22 = creatematrix(resize,resize);
-		float ** ctemp;
+		int ** a11 = creatematrix(resize,resize);
+		int ** a12 = creatematrix(resize,resize);
+		int ** a21 = creatematrix(resize,resize);
+		int ** a22 = creatematrix(resize,resize);
+		int ** b11 = creatematrix(resize,resize);
+		int ** b12 = creatematrix(resize,resize);
+		int ** b21 = creatematrix(resize,resize);
+		int ** b22 = creatematrix(resize,resize);
+		int ** ctemp;
 
 		for(i=0;i<resize;i++){
 			for(j=0;j<resize;j++){
@@ -138,30 +138,30 @@ float ** multiply(float ** a, float ** b, int size){
 			k++;
 		}
 		
-		float ** S1 = submatrix(b12, b22, resize);
-		float ** S2 = addmatrix(a11, a12, resize);
-		float ** S3 = addmatrix(a21, a22, resize);
-		float ** S4 = submatrix(b21, b11, resize);
-		float ** S5 = addmatrix(a11, a22, resize);
-		float ** S6 = addmatrix(b11, b22, resize);
-		float ** S7 = submatrix(a12, a22, resize);
-		float ** S8 = addmatrix(b21, b22, resize);
-		float ** S9 = submatrix(a11, a21, resize);
-		float ** S10 = addmatrix(b11, b12, resize);
+		int ** S1 = submatrix(b12, b22, resize);
+		int ** S2 = addmatrix(a11, a12, resize);
+		int ** S3 = addmatrix(a21, a22, resize);
+		int ** S4 = submatrix(b21, b11, resize);
+		int ** S5 = addmatrix(a11, a22, resize);
+		int ** S6 = addmatrix(b11, b22, resize);
+		int ** S7 = submatrix(a12, a22, resize);
+		int ** S8 = addmatrix(b21, b22, resize);
+		int ** S9 = submatrix(a11, a21, resize);
+		int ** S10 = addmatrix(b11, b12, resize);
 		
-		float ** P1=multiply(a11, S1, resize);
-		float ** P2=multiply(S2, b22, resize);
-		float ** P3=multiply(S3, b11, resize);
-		float ** P4=multiply(a22, S4, resize);
-		float ** P5=multiply(S5, S6, resize);
-		float ** P6=multiply(S7, S8, resize);
-		float ** P7=multiply(S9, S10, resize);
+		int ** P1=multiply(a11, S1, resize);
+		int ** P2=multiply(S2, b22, resize);
+		int ** P3=multiply(S3, b11, resize);
+		int ** P4=multiply(a22, S4, resize);
+		int ** P5=multiply(S5, S6, resize);
+		int ** P6=multiply(S7, S8, resize);
+		int ** P7=multiply(S9, S10, resize);
 		
 		
 
-		float ** t1;
+		int ** t1;
 		t1 = addmatrix(P5, P4, resize);
-		float ** t2;
+		int ** t2;
 		t2 = addmatrix(t1, P6, resize);
 		
 		ctemp = submatrix(t2, P2, resize);
@@ -253,34 +253,34 @@ int main(){
 	else{
 		size=squarematrix(acol);
 	}
-	float ** a = creatematrix(size,size);
+	int ** a = creatematrix(size,size);
 	for(i=0;i<arow;i++){
 		for(j=0;j<acol;j++){
-			fscanf(infile, "%f", &a[i][j]);	
+			fscanf(infile, "%d", &a[i][j]);	
 		}			
 	}
 	
 	fscanf(infile, "%d %d", &brow, &bcol);
-	float ** b = creatematrix(size,size);
+	int ** b = creatematrix(size,size);
 	for(i=0;i<brow;i++){
 		for(j=0;j<bcol;j++){
-			fscanf(infile, "%f", &b[i][j]);	
+			fscanf(infile, "%d", &b[i][j]);	
 		}			
 	}
 
 	start = omp_get_wtime();
 	
-	float ** c = multiply(a,b,size);
+	int ** c = multiply(a,b,size);
 
 	end = omp_get_wtime();
 	time=((double)end-start);
 	
-	outfile = fopen("output.txt", "w+");
+	outfile = fopen("output_recursive.txt", "w+");
 	fprintf(outfile, "Time: %lf s\n", time);
 	fprintf(outfile, "%d %d \n", arow, bcol);
 	for(i=0;i<arow;i++) {
 		for(j=0;j<bcol;j++){
-				fprintf(outfile, "%lf ", c[i][j]);
+				fprintf(outfile, "%d ", c[i][j]);
 		}
 		fprintf(outfile, "\n");		
 	}

@@ -4,7 +4,7 @@
 #include <omp.h>
 #include <string.h>
 #include <x86intrin.h>
-#define INPUTFILE "input/input1000.txt"
+#define INPUTFILE "input/input256.txt"
 void malloc_matrix(int m, int n, float ***matptr);
 void add(int m, int n, float **mat1, float **mat2, float **mat3);
 void sub(int m, int n, float **mat1, float **mat2, float **mat3);
@@ -72,7 +72,7 @@ int main(int argc,char*argv []) {
 	nb = to_x_multiple(4, nb_in);
 	
 	if(na != mb) {	// check dimension
-		printf("matrices dimension error \n");		
+		printf("matrices dimension error %d %d %d %d \n",na,nb,ma,mb);		
 		exit(1);	
 	}
 
