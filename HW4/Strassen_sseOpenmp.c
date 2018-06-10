@@ -5,7 +5,7 @@
 #include <string.h>
 #include <x86intrin.h>
 
-#define INPUTFILE "input/input1000.txt"
+#define INPUTFILE "input/test2"
 
 void malloc_matrix(int m, int n, float ***matptr);
 void add(int m, int n, float **mat1, float **mat2, float **mat3);

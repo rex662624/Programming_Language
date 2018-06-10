@@ -5,7 +5,7 @@
 #include <time.h>
 #include <omp.h>
 #define MAXTHREADS 4
-#define INPUTFILE "input/input1000.txt"
+#define INPUTFILE "input/test2"
 int arow,acol,brow,bcol;
 float ** a;
 float ** b;
@@ -65,7 +65,7 @@ int main() {
 		}
 	}
 	
-	outfile = fopen("output_openmp.txt", "a+");
+	outfile = fopen("output_basicpthread.txt", "a+");
 	pthread_t pt[MAXTHREADS];
 	start = omp_get_wtime();
 	for(i=0;i<MAXTHREADS;i++){
