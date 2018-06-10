@@ -5,7 +5,7 @@
 #include <string.h>
 #include <x86intrin.h>
 
-#define INPUTFILE "input/test2"
+#define INPUTFILE "input/test3"
 
 void malloc_matrix(int m, int n, float ***matptr);
 void add(int m, int n, float **mat1, float **mat2, float **mat3);
@@ -89,7 +89,8 @@ int main(int argc,char*argv []) {
 	fclose(infile);
 	
 	malloc_matrix(ma, nb, &C);
-	
+
+	double st,en;
 	/*** do multiplication in different methods ***/
 	outfile = fopen("output_sseOpenmp.txt", "w+");
 /*	
@@ -109,9 +110,10 @@ int main(int argc,char*argv []) {
 	printf("Basic+SSE +openmp: %lf\n",en-st);
 
 	fprintf(outfile, "Basic+SSE +openmp: %lf s \n", en-st);
-	// method 1 end
 */
-	double st,en;
+	// method 1 end
+
+	
 	// method 2 : Strassen algorithm
 	st=omp_get_wtime();
 	int na_2,nb_2,ma_2,mb_2;

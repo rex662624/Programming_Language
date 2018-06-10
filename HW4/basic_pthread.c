@@ -76,8 +76,8 @@ int main() {
 	}
 	end = omp_get_wtime();
 	time = ((double) (end - start));
-	printf("Time:%lf ms\n", time);
-	fprintf(outfile, "Basic + pthread: %lf s\n", time);
+	printf("Basic + pthread: %lf s\n", time);
+	fprintf(outfile, "Basic + pthread: %lf\n", time);
 	fprintf(outfile, "%d %d \n", arow, bcol);
 	for(i = 0; i < arow; i++) {
 		for(j = 0; j < bcol; j++)

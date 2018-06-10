@@ -10,7 +10,7 @@ void multiply(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float 
 
 void multiply2(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float **mat3);
 
-#define INPUTFILE "input/input1000.txt"
+#define INPUTFILE "input/test2"
 
 
 int main(int argc,char*argv []) {

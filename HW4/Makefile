@@ -1,15 +1,12 @@
-
-#define INPUTFILE "input/input1024"
-
 CC ?= gcc
-CFLAGS ?= -Wall -std=gnu99 -fopenmp -o
+CFLAGS ?= -Wall -std=gnu99 -fopenmp  -o
 
 EXEC = basic basic_pthread basic_sse Strassen_openmp Strassen_basic Strassen_pthread StrassenR_basicArray StrassenR_basic Strassen_sseOpenmp StrassenR_pool StrassenR_pthread
 
 all: $(EXEC)
 
 $(EXEC):% : %.c
-	$(CC) $(CFLAGS) $@ $^
+	$(CC) $(CFLAGS) $@ $^ 
 
 test1 : basic
 	echo 3 | sudo tee /proc/sys/vm/drop_caches

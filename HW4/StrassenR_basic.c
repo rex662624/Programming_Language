@@ -19,7 +19,7 @@ c22=p1+p5-p3-p7
 #include<time.h>
 #include<omp.h>
 
-#define INPUTFILE "input/input512.txt"
+#define INPUTFILE "input/input256.txt"
 
 int squarematrix(int num){
 	int original_num = num, lower_power = 0, i, actual_num = 1;

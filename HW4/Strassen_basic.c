@@ -49,7 +49,7 @@ matrix variables in the following code:
 #include <stdlib.h>
 #include <time.h>
 #include <omp.h>
-#define INPUTFILE "input/input512.txt"
+#define INPUTFILE "input/input256.txt"
 
 void malloc_matrix(int m, int n, float ***matptr);
 void add(int m, int n, float **mat1, float **mat2, float **mat3);
