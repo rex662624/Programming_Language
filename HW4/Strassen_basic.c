@@ -49,23 +49,23 @@ matrix variables in the following code:
 #include <stdlib.h>
 #include <time.h>
 #include <omp.h>
-#define INPUTFILE "input/input256.txt"
+#define INPUTFILE "input/test2"
 
-void malloc_matrix(int m, int n, float ***matptr);
-void add(int m, int n, float **mat1, float **mat2, float **mat3);
-void sub(int m, int n, float **mat1, float **mat2, float **mat3);
+void malloc_matrix(int m, int n, double ***matptr);
+void add(int m, int n, double **mat1, double **mat2, double **mat3);
+void sub(int m, int n, double **mat1, double **mat2, double **mat3);
 
 // split one matrix to four same-shape sub-matrices
-void matrix_split(int m, int n, float **mat,
-					float **mat1, float **mat2,
-					float **mat3, float **mat4);
+void matrix_split(int m, int n, double **mat,
+					double **mat1, double **mat2,
+					double **mat3, double **mat4);
 
 // merge four same-shape sub-matrices to one matrix
-void matrix_merge(int m, int n, float **mat,
-					float **mat1, float **mat2,
-					float **mat3, float **mat4);
+void matrix_merge(int m, int n, double **mat,
+					double **mat1, double **mat2,
+					double **mat3, double **mat4);
 
-void multiply(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float **mat3);
+void multiply(int m1, int n1, double **mat1, int m2, int n2, double **mat2, double **mat3);
 
 
 int main() {
@@ -75,12 +75,12 @@ int main() {
 	unsigned nb = 0;
 	int i = 0; // used in loop
 	int j = 0; // used in loop
-	float **A, **B, **C;
-	float **A11, **A12, **A21, **A22;
-	float **B11, **B12, **B21, **B22;
-	float **C11, **C12, **C21, **C22;
-	float **C111, **C112, **C221, **C222;
-	float **P1, **P2, **P, **Q1, **Q, **R1, **R, **S1, **S, **T1, **T, **U1, **U2, **U, **V1, **V2, **V;
+	double **A, **B, **C;
+	double **A11, **A12, **A21, **A22;
+	double **B11, **B12, **B21, **B22;
+	double **C11, **C12, **C21, **C22;
+	double **C111, **C112, **C221, **C222;
+	double **P1, **P2, **P, **Q1, **Q, **R1, **R, **S1, **S, **T1, **T, **U1, **U2, **U, **V1, **V2, **V;
 	FILE *infile, *outfile;
 
 	
@@ -96,7 +96,7 @@ int main() {
 	
 	for(i = 0; i < ma; i++)	// read A's content
 		for(j = 0; j < na; j++)
-			fscanf(infile, "%f", &A[i][j]);
+			fscanf(infile, "%lf", &A[i][j]);
 	
 	fscanf(infile, "%u %u", &mb, &nb);	// read B's dimensions
 	
@@ -109,7 +109,7 @@ int main() {
 	
 	for(i = 0; i < mb; i++)	// read B's content
 		for(j = 0; j < nb; j++)
-			fscanf(infile, "%f", &B[i][j]);
+			fscanf(infile, "%lf", &B[i][j]);
 	fclose(infile);
 	
 	
@@ -237,40 +237,40 @@ int main() {
 	return 0;
 }
 
-void malloc_matrix(int m, int n, float ***matptr) {
+void malloc_matrix(int m, int n, double ***matptr) {
 	/*
 	// the memory of the 2d array is not consecutive (each row)
 	int i;	
-	*matptr = malloc(m * sizeof(float *));
+	*matptr = malloc(m * sizeof(double *));
 	for(i = 0; i < m; i++) 
-		(*matptr)[i] = malloc(n * sizeof(float));
+		(*matptr)[i] = malloc(n * sizeof(double));
 	*/
 	
 	// the memory of the 2d array is consecutive (each row)
 	int i;
-	float *tmp;	
-	tmp = malloc(m * n * sizeof(float *));
-	*matptr = malloc(m * sizeof(float *));
+	double *tmp;	
+	tmp = malloc(m * n * sizeof(double *));
+	*matptr = malloc(m * sizeof(double *));
 	for(i = 0; i < m; i++)
 		(*matptr)[i] = &(tmp[n*i]);
 	
 }
 
-void add(int m, int n, float **mat1, float **mat2, float **mat3) {	
+void add(int m, int n, double **mat1, double **mat2, double **mat3) {	
 	int i, j;
 	for(i = 0; i < m; i++)
 		for(j = 0; j < n; j++)
 			mat3[i][j] = mat1[i][j] + mat2[i][j];	
 }
 
-void sub(int m, int n, float **mat1, float **mat2, float **mat3) {	
+void sub(int m, int n, double **mat1, double **mat2, double **mat3) {	
 	int i, j;
 	for(i = 0; i < m; i++)
 		for(j = 0; j < n; j++)
 			mat3[i][j] = mat1[i][j] - mat2[i][j];	
 }
 
-void multiply(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float **mat3) {	
+void multiply(int m1, int n1, double **mat1, int m2, int n2, double **mat2, double **mat3) {	
 	int i, j, k;
 	for(i = 0; i < m1; i++)
 		for(j = 0; j < n2; j++)
@@ -281,9 +281,9 @@ void multiply(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float 
 				mat3[i][k] += mat1[i][j] * mat2[j][k];
 }
 
-void matrix_split(int m, int n, float **mat,
-					float **mat11, float **mat12,
-					float **mat21, float **mat22) {
+void matrix_split(int m, int n, double **mat,
+					double **mat11, double **mat12,
+					double **mat21, double **mat22) {
 	int i, j;
 	if(m % 2 != 0 || n % 2 != 0) {
 		printf("m = %d, n = %d \n", m, n);
@@ -310,9 +310,9 @@ void matrix_split(int m, int n, float **mat,
 	
 }
 
-void matrix_merge(int m, int n, float **mat,
-					float **mat11, float **mat12,
-					float **mat21, float **mat22) {
+void matrix_merge(int m, int n, double **mat,
+					double **mat11, double **mat12,
+					double **mat21, double **mat22) {
 	int i, j;
 	if(m % 2 != 0 || n % 2 != 0) {
 		printf("error, cannot merge by 4 sub-matrices \n");

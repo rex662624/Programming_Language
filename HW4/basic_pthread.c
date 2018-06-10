@@ -7,9 +7,9 @@
 #define MAXTHREADS 4
 #define INPUTFILE "input/test2"
 int arow,acol,brow,bcol;
-float ** a;
-float ** b;
-float ** c;
+double ** a;
+double ** b;
+double ** c;
 void *multiply(void *arg);
 
 int main() {
@@ -26,38 +26,38 @@ int main() {
 
 	fscanf(infile, "%d %d", &arow, &acol);	
 	
-	a=(float **) calloc(arow, sizeof(float *));
+	a=(double **) calloc(arow, sizeof(double *));
 	for(i=0; i<arow; i++){
-		a[i]=(float *) calloc(acol, sizeof(float));
+		a[i]=(double *) calloc(acol, sizeof(double));
 	}
 	
 	for(i=0;i<arow;i++){
 		for(j=0;j<acol;j++){
-			fscanf(infile, "%f", &a[i][j]);	
+			fscanf(infile, "%lf", &a[i][j]);	
 		}
 			
 	}
 	
 	fscanf(infile, "%d %d", &brow, &bcol);
 	
-	b=(float **)calloc(brow, sizeof(float *));
+	b=(double **)calloc(brow, sizeof(double *));
 	
 	for(i=0; i<brow; i++){
-		b[i]=(float *)calloc(bcol, sizeof(float));
+		b[i]=(double *)calloc(bcol, sizeof(double));
 	}
 	
 	for(i=0;i<brow;i++){
 		for(j=0;j<bcol;j++){
-			fscanf(infile, "%f", &b[i][j]);
+			fscanf(infile, "%lf", &b[i][j]);
 		}
 				
 	}
 		
 	fclose(infile);
 	
-	c=(float **)calloc(arow, sizeof(float *));
+	c=(double **)calloc(arow, sizeof(double *));
 	for(i=0; i<arow; i++){
-		c[i]=(float *)calloc(bcol, sizeof(float));
+		c[i]=(double *)calloc(bcol, sizeof(double));
 	}
 	for(i=0;i<arow;i++){
 		for(j=0;j<bcol;j++){

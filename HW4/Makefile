@@ -1,5 +1,5 @@
 CC ?= gcc
-CFLAGS ?= -Wall -std=gnu99 -fopenmp  -o
+CFLAGS ?= -Wall -std=gnu99 -fopenmp -mavx -o
 
 EXEC = basic basic_pthread basic_sse Strassen_openmp Strassen_basic Strassen_pthread StrassenR_basicArray StrassenR_basic Strassen_sseOpenmp StrassenR_pool StrassenR_pthread
 

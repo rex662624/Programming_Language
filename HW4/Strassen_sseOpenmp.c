@@ -4,29 +4,30 @@
 #include <omp.h>
 #include <string.h>
 #include <x86intrin.h>
+#include <immintrin.h>
 
 #define INPUTFILE "input/test3"
 
-void malloc_matrix(int m, int n, float ***matptr);
-void add(int m, int n, float **mat1, float **mat2, float **mat3);
-void sub(int m, int n, float **mat1, float **mat2, float **mat3);
+void malloc_matrix(int m, int n, double ***matptr);
+void add(int m, int n, double **mat1, double **mat2, double **mat3);
+void sub(int m, int n, double **mat1, double **mat2, double **mat3);
 
 // split one matrix to four same-shape sub-matrices
-void matrix_split(int m, int n, float **mat,
-					float **mat1, float **mat2,
-					float **mat3, float **mat4);
+void matrix_split(int m, int n, double **mat,
+					double **mat1, double **mat2,
+					double **mat3, double **mat4);
 
 // merge four same-shape sub-matrices to one matrix
-void matrix_merge(int m, int n, float **mat,
-					float **mat1, float **mat2,
-					float **mat3, float **mat4);
+void matrix_merge(int m, int n, double **mat,
+					double **mat1, double **mat2,
+					double **mat3, double **mat4);
 
-void multiply(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float **mat3);
-void multiply_NotP(int m1, int n1, float **mat1, int m2, int n2, float **mat2,float **mat3);
+void multiply(int m1, int n1, double **mat1, int m2, int n2, double **mat2, double **mat3);
+void multiply_NotP(int m1, int n1, double **mat1, int m2, int n2, double **mat2,double **mat3);
 
 int to_x_multiple(int x, int in);
 int thread_count=1;
-float **A, **B, **C;
+double **A, **B, **C;
 
 int main(int argc,char*argv []) {
 	//輸入的
@@ -43,11 +44,11 @@ int main(int argc,char*argv []) {
 	int i = 0; // used in loop
 	int j = 0; // used in loop
 
-	float **A11, **A12, **A21, **A22;
-	float **B11, **B12, **B21, **B22;
-	float **C11, **C12, **C21, **C22;
-	float **C111, **C112, **C221, **C222;
-	float **P1, **P2, **P, **Q1, **Q, **R1, **R, **S1, **S, **T1, **T, **U1, **U2, **U, **V1, **V2, **V;
+	double **A11, **A12, **A21, **A22;
+	double **B11, **B12, **B21, **B22;
+	double **C11, **C12, **C21, **C22;
+	double **C111, **C112, **C221, **C222;
+	double **P1, **P2, **P, **Q1, **Q, **R1, **R, **S1, **S, **T1, **T, **U1, **U2, **U, **V1, **V2, **V;
 	FILE *infile, *outfile;
 	
 	infile = fopen(INPUTFILE, "r");
@@ -65,7 +66,7 @@ int main(int argc,char*argv []) {
 	
 	for(i = 0; i < ma_in; i++)	{
 		for(j = 0; j < na_in; j++) {
-				fscanf(infile, "%f", &A[i][j]);
+				fscanf(infile, "%lf", &A[i][j]);
 		}
 	}
 
@@ -82,7 +83,7 @@ int main(int argc,char*argv []) {
      	malloc_matrix(mb, nb, &B);
 	for(i = 0; i < mb_in; i++)	{
 		for(j = 0; j < nb_in; j++) {
-				fscanf(infile, "%f", &B[i][j]);
+				fscanf(infile, "%lf", &B[i][j]);
 		}
 	}
 	
@@ -177,6 +178,24 @@ int main(int argc,char*argv []) {
 
 		multiply(ma/2, na/2, P1, mb/2, nb/2, P2, P);
 		
+
+
+/*
+#pragma omp parallel for num_threads(thread_count) shared(P,P2,P1)private(i, j, k) 
+    for(i=0; i<ma/2; i++) {
+        for(j=0; j<na/2; j++) {
+            __m256d a4 = _mm256_set_pd(P1[i][j],P1[i][j],P1[i][j],P1[i][j]);
+            for(k=0; k<nb/2; k+=4) {
+                __m256d c4 = _mm256_load_pd(&P[i][k]);
+                __m256d b4 = _mm256_load_pd(&P2[j][k]);
+                c4 = _mm256_add_pd(_mm256_mul_pd(a4,b4),c4);
+                _mm256_store_pd(&P[i][k], c4);
+            }
+        }
+    }
+
+*/
+
 		add(ma/2, na/2, A21, A22, Q1); // Q
 		multiply(ma/2, na/2, Q1, mb/2, nb/2, B11, Q);
 		
@@ -241,20 +260,20 @@ int to_x_multiple(int x, int in) {
 	return in;
 }
 
-void malloc_matrix(int m, int n, float ***matptr) {
+void malloc_matrix(int m, int n, double ***matptr) {
 	// the memory of the 2d array is consecutive (each row)
 	int i;
-	float *tmp;	
-	tmp = _mm_malloc(m * n * sizeof(float), 16);
-//	tmp = malloc(m * n * sizeof(float));
-	memset(tmp, 0, m*n * sizeof (float));
-	*matptr = malloc(m * sizeof(float *));
+	double *tmp;	
+	tmp = _mm_malloc(m * n * sizeof(double), 64);
+//	tmp = malloc(m * n * sizeof(double));
+	memset(tmp, 0, m*n * sizeof (double));
+	*matptr = malloc(m * sizeof(double *));
 	for(i = 0; i < m; i++)
 		(*matptr)[i] = &(tmp[n*i]);
 	
 }
 
-void add(int m, int n, float **mat1, float **mat2, float **mat3) {	
+void add(int m, int n, double **mat1, double **mat2, double **mat3) {	
 	int i, j;
 	#pragma omp parallel for num_threads(thread_count) private(i,j) shared(mat3,mat2,mat1)
 	for(i = 0; i < m; i++)
@@ -262,7 +281,7 @@ void add(int m, int n, float **mat1, float **mat2, float **mat3) {
 			mat3[i][j] = mat1[i][j] + mat2[i][j];	
 }
 
-void sub(int m, int n, float **mat1, float **mat2, float **mat3) {	
+void sub(int m, int n, double **mat1, double **mat2, double **mat3) {	
 	int i, j;
 	#pragma omp parallel for num_threads(thread_count) private(i,j) shared(mat3,mat2,mat1)
 	for(i = 0; i < m; i++)
@@ -270,7 +289,8 @@ void sub(int m, int n, float **mat1, float **mat2, float **mat3) {
 			mat3[i][j] = mat1[i][j] - mat2[i][j];	
 }
 
-void multiply(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float **mat3) {	
+
+void multiply(int m1, int n1, double **mat1, int m2, int n2, double **mat2, double **mat3) {	
 	int i, j, k;
 
 #pragma omp parallel for num_threads(thread_count)private(i,j) shared(mat3)
@@ -280,17 +300,18 @@ void multiply(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float 
 	#pragma omp parallel for num_threads(thread_count) private(i, j, k) shared(mat3,mat1,mat2,m1,n1,n2)
     for(i=0; i<m1; i++) {
         for(j=0; j<n1; j++) {
-            __m128 a4 = _mm_load1_ps(&mat1[i][j]);
+          __m256d a4 = _mm256_set_pd(mat1[i][j],mat1[i][j],mat1[i][j],mat1[i][j]);
             for(k=0; k<n2; k+=4) {
-                __m128 c4 = _mm_load_ps(&mat3[i][k]);
-                __m128 b4 = _mm_load_ps(&mat2[j][k]);
-                c4 = _mm_add_ps(_mm_mul_ps(a4,b4),c4);
-                _mm_store_ps(&mat3[i][k], c4);
+                __m256d c4 = _mm256_load_pd(&mat3[i][k]);
+                __m256d b4 = _mm256_load_pd(&mat2[j][k]);
+                c4 = _mm256_add_pd(_mm256_mul_pd(a4,b4),c4);
+                _mm256_store_pd(&mat3[i][k], c4);
             }
         }
     }
 }
-void multiply_NotP(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float **mat3) {	
+
+void multiply_NotP(int m1, int n1, double **mat1, int m2, int n2, double **mat2, double **mat3) {	
 	int i, j, k;
 
 	for(i = 0; i < m1; i++)
@@ -303,9 +324,9 @@ void multiply_NotP(int m1, int n1, float **mat1, int m2, int n2, float **mat2, f
 				mat3[i][k] += mat1[i][j] * mat2[j][k];
 }				
 
-void matrix_split(int m, int n, float **mat,
-					float **mat11, float **mat12,
-					float **mat21, float **mat22) {
+void matrix_split(int m, int n, double **mat,
+					double **mat11, double **mat12,
+					double **mat21, double **mat22) {
 	int i, j;
 	if(m % 2 != 0 || n % 2 != 0) {
 		printf("m = %d, n = %d \n", m, n);
@@ -334,9 +355,9 @@ void matrix_split(int m, int n, float **mat,
 	
 }
 
-void matrix_merge(int m, int n, float **mat,
-					float **mat11, float **mat12,
-					float **mat21, float **mat22) {
+void matrix_merge(int m, int n, double **mat,
+					double **mat11, double **mat12,
+					double **mat21, double **mat22) {
 	int i, j;
 	if(m % 2 != 0 || n % 2 != 0) {
 		printf("error, cannot merge by 4 sub-matrices \n");

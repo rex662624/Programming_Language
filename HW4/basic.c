@@ -4,11 +4,11 @@
 #include <omp.h>
 
 
-void malloc_matrix(int m, int n, float ***matptr);
+void malloc_matrix(int m, int n, double ***matptr);
 
-void multiply(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float **mat3);
+void multiply(int m1, int n1, double **mat1, int m2, int n2, double **mat2, double **mat3);
 
-void multiply2(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float **mat3);
+void multiply2(int m1, int n1, double **mat1, int m2, int n2, double **mat2, double **mat3);
 
 #define INPUTFILE "input/test2"
 
@@ -26,7 +26,7 @@ int main(int argc,char*argv []) {
 	unsigned nb = 0;
 	int i = 0; // used in loop
 	int j = 0; // used in loop
-	float **A, **B, **C ,**C2;
+	double **A, **B, **C ,**C2;
 	FILE *infile, *outfile;
 
 	
@@ -42,7 +42,7 @@ int main(int argc,char*argv []) {
 	
 	for(i = 0; i < ma; i++)	// read A's content
 		for(j = 0; j < na; j++)
-			fscanf(infile, "%f", &A[i][j]);
+			fscanf(infile, "%lf", &A[i][j]);
 	
 	fscanf(infile, "%u %u", &mb, &nb);	// read B's dimensions
 	
@@ -55,7 +55,7 @@ int main(int argc,char*argv []) {
 	
 	for(i = 0; i < mb; i++)	// read B's content
 		for(j = 0; j < nb; j++)
-			fscanf(infile, "%f", &B[i][j]);
+			fscanf(infile, "%lf", &B[i][j]);
 	fclose(infile);
 	
 	
@@ -79,16 +79,18 @@ int main(int argc,char*argv []) {
 	multiply(ma, na, A, mb, nb, B, C);
 	en=omp_get_wtime();
 	printf("Row major: %lf\n",en-st);	
+
 	fprintf(outfile, "Row major: %lf s \n", en-st);
 	}
 	// method 2 end
-/*	
+	/*
 	for(i = 0; i < ma; i++) 
 		for(j = 0; j < nb; j++)
 			if(C2[i][j]!=C[i][j])printf("error\n");
-*/	
+	*/
 	// output the result matrix C 
 	fprintf(outfile, "%d %d \n", ma, nb);
+	
 	for(i = 0; i < ma; i++) {
 		for(j = 0; j < nb; j++)
 			if(flag!=1)
@@ -102,26 +104,26 @@ int main(int argc,char*argv []) {
 	return 0;
 }
 
-void malloc_matrix(int m, int n, float ***matptr) {
+void malloc_matrix(int m, int n, double ***matptr) {
 	/*
 	// the memory of the 2d array is not consecutive (each row)
 	int i;	
-	*matptr = malloc(m * sizeof(float *));
+	*matptr = malloc(m * sizeof(double *));
 	for(i = 0; i < m; i++) 
 		(*matptr)[i] = malloc(n * sizeof(float));
 	*/
 	
 	// the memory of the 2d array is consecutive (each row)
 	int i;
-	float *tmp;	
-	tmp = malloc(m * n * sizeof(float *));
-	*matptr = malloc(m * sizeof(float *));
+	double *tmp;	
+	tmp = malloc(m * n * sizeof(double *));
+	*matptr = malloc(m * sizeof(double *));
 	for(i = 0; i < m; i++)
 		(*matptr)[i] = &(tmp[n*i]);
 	
 }
 
-void multiply(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float **mat3) {	
+void multiply(int m1, int n1, double **mat1, int m2, int n2, double **mat2, double **mat3) {	
 	int i, j, k;
 	for(i = 0; i < m1; i++)
 		for(j = 0; j < n2; j++)
@@ -132,7 +134,7 @@ void multiply(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float 
 				mat3[i][k] += mat1[i][j] * mat2[j][k];
 }
 
-void multiply2(int m1, int n1, float **mat1, int m2, int n2, float **mat2, float **mat3) {	
+void multiply2(int m1, int n1, double **mat1, int m2, int n2, double **mat2, double **mat3) {	
 	int i, j, k;
 	for(i = 0; i < m1; i++)
 		for(j = 0; j < n2; j++)
